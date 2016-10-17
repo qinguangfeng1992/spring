@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qinguangfeng.dao.mapper.NewuserMapper">
+
+    <sql id="newuserBaseColumnSql">
+        usid,
+        uname,
+        upwd
+    </sql>
+
+    <sql id="newuserBaseWhereSql">
+        <if test="map!=null">
+            <where>
+                <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(map.usid)">
+                    usid = #{map.usid}
+                </if>
+                <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(map.uname)">
+                    AND uname = #{map.uname}
+                </if>
+                <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(map.upwd)">
+                    AND upwd = #{map.upwd}
+                </if>
+            </where>
+        </if>
+    </sql>
+
+    <insert id="insertNewuser" parameterType="com.qinguangfeng.dao.entity.Newuser">
+        INSERT INTO newusers(
+        <include refid="newuserBaseColumnSql"/>
+        )VALUES(
+            #{usid},
+            #{uname},
+            #{upwd}
+        )
+    </insert>
+
+    
+    <delete id="deleteNewuserByUsid" parameterType="Integer">
+        DELETE FROM newusers WHERE usid = #{usid}
+    </delete>
+
+    <update id="updateNewuser" parameterType="com.qinguangfeng.dao.entity.Newuser">
+        UPDATE newusers
+        <set>
+            <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(uname)">
+                uname = #{uname} ,
+            </if>
+            <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(upwd)">
+                upwd = #{upwd} ,
+            </if>
+        </set>
+        WHERE usid = #{usid}
+    </update>
+
+    <select id="searchNewuserByParams" parameterType="map" resultMap="newuserMap">
+        SELECT
+        <include refid="newuserBaseColumnSql"/>
+        FROM newusers
+        <include refid="newuserBaseWhereSql"/>
+    </select>
+
+    <resultMap type="com.qinguangfeng.dao.entity.Newuser" id="newuserMap">
+        <id column="usid" property="usid"/>
+        <result column="uname" property="uname"/>
+        <result column="upwd" property="upwd"/>
+    </resultMap>
+
+</mapper>

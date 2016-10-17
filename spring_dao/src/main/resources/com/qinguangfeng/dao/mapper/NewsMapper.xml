@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qinguangfeng.dao.mapper.NewMapper">
+
+    <sql id="newBaseColumnSql">
+        nid,
+        ntid,
+        ntitle,
+        nauthor,
+        ncreatedate,
+        ncontent,
+        nmodifydate,
+        nsummary
+    </sql>
+
+    <sql id="newBaseWhereSql">
+        <if test="map!=null">
+            <where>
+                <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(map.nid)">
+                    nid = #{map.nid}
+                </if>
+                <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(map.ntid)">
+                    AND ntid = #{map.ntid}
+                </if>
+                <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(map.ntitle)">
+                    AND ntitle = #{map.ntitle}
+                </if>
+                <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(map.nauthor)">
+                    AND nauthor = #{map.nauthor}
+                </if>
+                <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(map.ncreatedate)">
+                    AND ncreatedate = #{map.ncreatedate}
+                </if>
+                <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(map.ncontent)">
+                    AND ncontent = #{map.ncontent}
+                </if>
+                <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(map.nmodifydate)">
+                    AND nmodifydate = #{map.nmodifydate}
+                </if>
+                <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(map.nsummary)">
+                    AND nsummary = #{map.nsummary}
+                </if>
+            </where>
+        </if>
+    </sql>
+
+    <insert id="insertNew" parameterType="com.qinguangfeng.dao.entity.New">
+        INSERT INTO news(
+        <include refid="newBaseColumnSql"/>
+        )VALUES(
+            #{nid},
+            #{ntid},
+            #{ntitle},
+            #{nauthor},
+            #{ncreatedate},
+            #{ncontent},
+            #{nmodifydate},
+            #{nsummary}
+        )
+    </insert>
+
+    
+    <delete id="deleteNewByNid" parameterType="Integer">
+        DELETE FROM news WHERE nid = #{nid}
+    </delete>
+
+    <update id="updateNew" parameterType="com.qinguangfeng.dao.entity.New">
+        UPDATE news
+        <set>
+            <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(ntid)">
+                ntid = #{ntid} ,
+            </if>
+            <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(ntitle)">
+                ntitle = #{ntitle} ,
+            </if>
+            <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(nauthor)">
+                nauthor = #{nauthor} ,
+            </if>
+            <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(ncreatedate)">
+                ncreatedate = #{ncreatedate} ,
+            </if>
+            <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(ncontent)">
+                ncontent = #{ncontent} ,
+            </if>
+            <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(nmodifydate)">
+                nmodifydate = #{nmodifydate} ,
+            </if>
+            <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(nsummary)">
+                nsummary = #{nsummary} ,
+            </if>
+        </set>
+        WHERE nid = #{nid}
+    </update>
+
+    <select id="searchNewByParams" parameterType="map" resultMap="newMap">
+        SELECT
+        <include refid="newBaseColumnSql"/>
+        FROM news
+        <include refid="newBaseWhereSql"/>
+    </select>
+
+    <resultMap type="com.qinguangfeng.dao.entity.New" id="newMap">
+        <id column="nid" property="nid"/>
+        <result column="ntid" property="ntid"/>
+        <result column="ntitle" property="ntitle"/>
+        <result column="nauthor" property="nauthor"/>
+        <result column="ncreatedate" property="ncreatedate"/>
+        <result column="ncontent" property="ncontent"/>
+        <result column="nmodifydate" property="nmodifydate"/>
+        <result column="nsummary" property="nsummary"/>
+    </resultMap>
+
+</mapper>

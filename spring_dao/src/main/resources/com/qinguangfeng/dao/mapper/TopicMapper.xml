@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qinguangfeng.dao.mapper.TopicMapper">
+
+    <sql id="topicBaseColumnSql">
+        tid,
+        tname,
+        tlogic
+    </sql>
+
+    <sql id="topicBaseWhereSql">
+        <if test="map!=null">
+            <where>
+                <if test="map.tid!=null">
+                    tid = #{map.tid}
+                </if>
+                <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(map.tname)">
+                    AND tname = #{map.tname}
+                </if>
+                <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(map.tlogic)">
+                    AND tlogic = #{map.tlogic}
+                </if>
+            </where>
+        </if>
+    </sql>
+
+    <insert id="insertTopic" parameterType="com.qinguangfeng.dao.entity.Topic">
+        INSERT INTO topics(
+        <include refid="topicBaseColumnSql"/>
+        )VALUES(
+            #{tid},
+            #{tname},
+            #{tlogic}
+        )
+    </insert>
+
+    
+    <delete id="deleteTopicByTid" parameterType="Integer">
+        DELETE FROM topics WHERE tid = #{tid}
+    </delete>
+
+    <update id="updateTopic" parameterType="com.qinguangfeng.dao.entity.Topic">
+        UPDATE topics
+        <set>
+            <if test="tname!=null">
+                tname = #{tname} ,
+            </if>
+            <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(tlogic)">
+                tlogic = #{tlogic} ,
+            </if>
+        </set>
+        WHERE tid = #{tid}
+    </update>
+
+    <select id="searchTopicByParams" parameterType="map" resultMap="topicMap">
+        SELECT
+        <include refid="topicBaseColumnSql"/>
+        FROM topics
+        <include refid="topicBaseWhereSql"/>
+    </select>
+
+    <resultMap type="com.qinguangfeng.dao.entity.Topic" id="topicMap">
+        <id column="tid" property="tid"/>
+        <result column="tname" property="tname"/>
+        <result column="tlogic" property="tlogic"/>
+    </resultMap>
+
+</mapper>
